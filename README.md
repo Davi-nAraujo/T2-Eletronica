@@ -37,8 +37,6 @@ https://github.com/user-attachments/assets/4f30cf11-2924-410c-b015-acd3bf34ff95
 ## Código do Arduino
 
 > O sketch completo está dobrado em um `<details>` para manter o README enxuto.  
-> Dentro do bloco de código usamos **syntax highlighting** `arduino` e marcamos as
-> três linhas-chave com `// highlight-line`.
 
 <details>
 <summary>▼ Ver clonador_ir.ino completo</summary>
@@ -144,6 +142,7 @@ void loop() {
   IrReceiver.resume();
 }
 
+</details> ```
 ## Integrantes
 
 * Clara Santos de Melo

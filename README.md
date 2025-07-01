@@ -36,8 +36,16 @@ https://github.com/user-attachments/assets/4f30cf11-2924-410c-b015-acd3bf34ff95
 
 ## Código do Arduino
 
+> O sketch completo está dobrado em um `<details>` para manter o README enxuto.  
+> Dentro do bloco de código usamos **syntax highlighting** `arduino` e marcamos as
+> três linhas-chave com `// highlight-line`.
+
+<details>
+<summary>▼ Ver clonador_ir.ino completo</summary>
+
+```arduino
 /*  ──────────────────────────────────────────────────────────────
-                           CLONADOR IR
+    CLONADOR IR   · Somente NEC (controle do kit)  +  NEC2 (projetor)
     --------------------------------------------------------------
     ▸ Pressione o botão "KEY_LEARN" (código 70) do controle NEC
       • 1ª vez  → entra em modo aprendizagem; aguarda quadro NEC2
@@ -50,11 +58,11 @@ https://github.com/user-attachments/assets/4f30cf11-2924-410c-b015-acd3bf34ff95
 #define IR_RX_PIN    3
 #define IR_TX_PIN    9
 
-constexpr uint8_t KEY_LEARN = 70;   // botão do controle NEC do kit
-constexpr uint8_t KEY_RESET = 68;   // apaga memória
-constexpr int_fast8_t REPEATS = 2;  // 0-3, ajuste conforme necessário
+constexpr uint8_t KEY_LEARN = 70;   // highlight-line
+constexpr uint8_t KEY_RESET = 68;   // highlight-line
+constexpr int_fast8_t REPEATS = 2;  // 0-3, ajuste conforme necessário  // highlight-line
 
-
+// ---------------------- slot único p/ o projetor ----------------------
 bool     nec2Learned = false;
 uint16_t projAddr    = 0;
 uint8_t  projCmd     = 0;
@@ -135,7 +143,6 @@ void loop() {
 
   IrReceiver.resume();
 }
-
 
 ## Integrantes
 

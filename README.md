@@ -22,17 +22,16 @@ Trabalho 2 de Eletrônica do Simões
 * **Transistor:** Este componente eletrônico tem a função de amplificar ou atenuar a intensidade da corrente elétrica em circuitos. No contexto deste projeto, ele é empregado para regular a corrente que flui através do diodo Zener.
 * **Receptor IR:** Esse componente tem a função de captar o sinal infravermelho emitido e passar ele para o arduino por meio de um pulso PWM.
 * **LED IR:** Esse componente tem a função de emitir sinal infravermelho de acordo com o pulso PWM emitido pelo arduino para controlar a frequencia do sinal.
+
 ## Cálculos
 
-![calculo](https://github.com/user-attachments/assets/24644876-72a1-4545-81ac-5633578a4635)
+![image](https://github.com/user-attachments/assets/d9308c17-a59f-40db-bda9-da1e9720241a)
 
+    
 ## Foto e Vídeo do Circuito
 
-![WhatsApp Image 2025-07-01 at 01 35 00](https://github.com/user-attachments/assets/1f8ea21a-e3fe-4de8-b6ce-d500fbe41903)
+![image](https://github.com/user-attachments/assets/ae90e956-0f82-4351-b938-cfcb9499f68c)
 
-https://github.com/user-attachments/assets/c70db6a1-dd09-49a1-866d-9a52d798d033
-
-https://github.com/user-attachments/assets/4f30cf11-2924-410c-b015-acd3bf34ff95
 
 ## Código do Arduino
 

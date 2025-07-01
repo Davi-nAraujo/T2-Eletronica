@@ -20,7 +20,8 @@ Trabalho 2 de Eletrônica do Simões
 
 * **Resistores:** Componentes eletrônicos que dificultam a passagem de corrente elétrica. Em projetos, eles são empregados para atenuar a intensidade da corrente e reduzir o potencial elétrico que flui pelos demais componentes.
 * **Transistor:** Este componente eletrônico tem a função de amplificar ou atenuar a intensidade da corrente elétrica em circuitos. No contexto deste projeto, ele é empregado para regular a corrente que flui através do diodo Zener.
-
+* **Receptor IR:** Esse componente tem a função de captar o sinal infravermelho emitido e passar ele para o arduino por meio de um pulso PWM.
+* **LED IR:** Esse componente tem a função de emitir sinal infravermelho de acordo com o pulso PWM emitido pelo arduino para controlar a frequencia do sinal.
 ## Cálculos
 
 ![calculo](https://github.com/user-attachments/assets/24644876-72a1-4545-81ac-5633578a4635)
@@ -32,6 +33,109 @@ Trabalho 2 de Eletrônica do Simões
 https://github.com/user-attachments/assets/c70db6a1-dd09-49a1-866d-9a52d798d033
 
 https://github.com/user-attachments/assets/4f30cf11-2924-410c-b015-acd3bf34ff95
+
+## Código do Arduino
+
+/*  ──────────────────────────────────────────────────────────────
+                           CLONADOR IR
+    --------------------------------------------------------------
+    ▸ Pressione o botão "KEY_LEARN" (código 70) do controle NEC
+      • 1ª vez  → entra em modo aprendizagem; aguarda quadro NEC2
+      • 2ª vez  → transmite o quadro NEC2 gravado (liga/desliga projetor)
+    ▸ Pressione "KEY_RESET" (código 68) para apagar o slot
+    -------------------------------------------------------------- */
+
+#include <IRremote.h>
+
+#define IR_RX_PIN    3
+#define IR_TX_PIN    9
+
+constexpr uint8_t KEY_LEARN = 70;   // botão do controle NEC do kit
+constexpr uint8_t KEY_RESET = 68;   // apaga memória
+constexpr int_fast8_t REPEATS = 2;  // 0-3, ajuste conforme necessário
+
+
+bool     nec2Learned = false;
+uint16_t projAddr    = 0;
+uint8_t  projCmd     = 0;
+
+// ---------------------- funções utilitárias --------------------------
+void logDecode() {
+  auto &d = IrReceiver.decodedIRData;
+  Serial.print(F("[RX] proto="));
+  Serial.print(d.protocol == NEC        ? "NEC" :
+               d.protocol == NEC2       ? "NEC2" : "OUTRO");
+  Serial.print(F(" addr=0x")); Serial.print(d.address, HEX);
+  Serial.print(F(" cmd=0x"));  Serial.print(d.command, HEX);
+  Serial.print(F(" flags=0b")); Serial.println(d.flags, BIN);
+}
+
+void learnNEC2() {
+  Serial.println(F("Aguardando sinal NEC2 do projetor..."));
+  IrReceiver.resume();
+  while (true) {
+    if (!IrReceiver.decode()) continue;
+    if (IrReceiver.decodedIRData.protocol == NEC2 &&
+        IrReceiver.decodedIRData.command != 0x00) {
+      // quadro válido
+      projAddr    = IrReceiver.decodedIRData.address;
+      projCmd     = IrReceiver.decodedIRData.command;
+      nec2Learned = true;
+      Serial.print(F("Gravado NEC2 addr=0x")); Serial.print(projAddr, HEX);
+      Serial.print(F(" cmd=0x"));              Serial.println(projCmd, HEX);
+      IrReceiver.resume();
+      return;
+    }
+    IrReceiver.resume();   // ignora qualquer coisa que não seja NEC2
+  }
+}
+
+void sendNEC2() {
+  if (!nec2Learned) {
+    Serial.println(F("Slot vazio — aprenda primeiro."));
+    return;
+  }
+  Serial.print(F("Enviando NEC2 0x")); Serial.print(projAddr, HEX);
+  Serial.print(F(" 0x"));              Serial.print(projCmd, HEX);
+  Serial.print(F(" rep="));            Serial.println(REPEATS);
+  IrSender.sendNEC2(projAddr, projCmd, REPEATS);
+}
+
+// ---------------------------------------------------------------------
+void setup() {
+  Serial.begin(115200);
+  IrReceiver.begin(IR_RX_PIN);
+  IrSender.begin(IR_TX_PIN);
+  Serial.println(F("=== Clonador IR (NEC + NEC2) pronto ==="));
+}
+
+void loop() {
+  if (!IrReceiver.decode()) return;
+
+  // Ignora tudo que não for NEC (controle do kit) ou NEC2 (projetor)
+  if (IrReceiver.decodedIRData.protocol == NEC) {
+    uint8_t key = IrReceiver.decodedIRData.command;
+    logDecode();                // mostra a tecla pressionada no kit
+    switch (key) {
+      case KEY_LEARN:
+        if (!nec2Learned) learnNEC2();
+        else              sendNEC2();
+        break;
+
+      case KEY_RESET:
+        nec2Learned = false;
+        Serial.println(F("Slot apagado."));
+        break;
+    }
+  }
+  else if (IrReceiver.decodedIRData.protocol == NEC2) {
+    // útil para monitorar o sinal original do projetor, caso queira
+    logDecode();
+  }
+
+  IrReceiver.resume();
+}
+
 
 ## Integrantes
 

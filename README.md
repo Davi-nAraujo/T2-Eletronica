@@ -32,6 +32,7 @@ Trabalho 2 de Eletrônica do Simões
 
 ![image](https://github.com/user-attachments/assets/ae90e956-0f82-4351-b938-cfcb9499f68c)
 
+https://github.com/user-attachments/assets/6d1ea86a-db5b-4c54-b14b-bcedd32fb638
 
 ## Código do Arduino
 

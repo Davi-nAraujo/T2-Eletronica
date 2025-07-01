@@ -141,10 +141,11 @@ void loop() {
 
   IrReceiver.resume();
 }
+```
+
 </details>
 
 ## Integrantes
-
 * Clara Santos de Melo
 * Davi Nascimento Araujo
 * Leonardo Vianna Molina Silva

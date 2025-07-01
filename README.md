@@ -141,8 +141,8 @@ void loop() {
 
   IrReceiver.resume();
 }
+</details>
 
-</details> ```
 ## Integrantes
 
 * Clara Santos de Melo
